@@ -6,6 +6,7 @@ import numpy as np
 from face_detection_er import *
 import json
 from scene_changes_time import detect_scene_changes
+from transcript_output_v2 import process_audio_folder
 
 if __name__ == '__main__':
 
@@ -13,9 +14,10 @@ if __name__ == '__main__':
     parser.add_argument('--video_path', type=str, default='video.mp4')
     parser.add_argument('--frame_interval', type=int, default=20)
     parser.add_argument('--frame_location', type=str, default='./frames')
+    parser.add_argument('--speech_seg', type=bool, default=True)
     parser.add_argument('--weapons', type=bool, default=False) #####SWITCH BACK TO TRUE TO RUN
-    parser.add_argument('--ocr', type=bool, default=True) #####SWITCH BACK TO TRUE TO RUN
-    parser.add_argument('--objects', type=bool, default=True)
+    parser.add_argument('--ocr', type=bool, default=False) #####SWITCH BACK TO TRUE TO RUN
+    parser.add_argument('--objects', type=bool, default=False)#####SWITCH BACK TO TRUE TO RUN
     parser.add_argument('--save_json', type=str, default='save_file.json')
     parser.add_argument('--emotion_recognition', type=bool, default=True)
 
@@ -40,6 +42,11 @@ if __name__ == '__main__':
             return obj.tolist()
         raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
 
+    if args.speech_seg:
+        print("🔊 Running speech segmentation...")
+        audio_folder = "./amz"  # or use another path if needed
+        api_key = "e521205915e24617a14a74bf79424798"  # Ideally get from env or config
+        process_audio_folder(audio_folder, api_key)
 
     ## Loop through each extracted frame
     # improved to indicate which features are being detected
@@ -82,35 +89,35 @@ if __name__ == '__main__':
                     features[frame]['emotion_recognition'] = output.tolist() if isinstance(output, np.ndarray) else output
                 print("Emotion Recognition:", output, "\n")
 
-    ## loop through each of the frames
-    # for frame in frames:
-    #     print("Processing Frame:", frame)
+    # loop through each of the frames
+    for frame in frames:
+        print("Processing Frame:", frame)
 
-    #     ## reads the frame using opencv to get the numpy array of the pixels
-    #     if frame!='video':
-    #       img = cv2.imread(args.frame_location+'/'+frame)
-    #       # creates an empty list of the extracted features
-    #       features[frame] = []
+        ## reads the frame using opencv to get the numpy array of the pixels
+        if frame!='video':
+          img = cv2.imread(args.frame_location+'/'+frame)
+          # creates an empty list of the extracted features
+          features[frame] = []
         
-    #     # depending on the flags different features are extracted
-    #     ## with functions from the visual features python file
-    #     if args.weapons:
-    #         output = extractor.weapon_detection(img)
-    #         features[frame].append(output)
-    #     if args.ocr:
-    #           output = extractor.text_ocr(img)
-    #           features[frame].append(output)
-    #     if args.objects:
-    #           output = extractor.object_detection(img)
-    #           features[frame].append(output)
+        # depending on the flags different features are extracted
+        ## with functions from the visual features python file
+        if args.weapons:
+            output = extractor.weapon_detection(img)
+            features[frame].append(output)
+        if args.ocr:
+              output = extractor.text_ocr(img)
+              features[frame].append(output)
+        if args.objects:
+              output = extractor.object_detection(img)
+              features[frame].append(output)
         
-    #     if args.emotion_recognition:
-    #         output = extractor.emotion_recognition(img)
-    #         # if the output is a single integer it converts it to a list for consistency
-    #         if isinstance(output, int):
-    #             output = [output]
+        if args.emotion_recognition:
+            output = extractor.emotion_recognition(img)
+            # if the output is a single integer it converts it to a list for consistency
+            if isinstance(output, int):
+                output = [output]
 
-    #         features[frame].append(output)
+            features[frame].append(output)
     
     ## writes the feature dictionary in a new json file, default called save_file json
     with open(args.save_json, 'w') as f:

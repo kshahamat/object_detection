@@ -116,7 +116,7 @@ for file_name in tqdm(file_names, desc='Processing detection files'):
         df['velocity'] = velocities
         
         # Determine scene changes based on velocity threshold
-        velocity_threshold = 50  # Adjust as needed for your videos
+        velocity_threshold = 65  # Adjust as needed for your videos
         df['scene_change'] = df['velocity'] > velocity_threshold
         
         # Extract the identifier from the filename

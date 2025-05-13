@@ -1,6 +1,7 @@
 # notes:
 
 - save jpg of frames as their time stamp to make It easier to go back and cross-check
+- Referenced from: https://github.com/yyw28/earning_call/blob/main/transcript_output_v2.py
 
 # object_detection
 

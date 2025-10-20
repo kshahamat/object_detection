@@ -1,7 +1,5 @@
 # Radicalization Vision Pipeline
 
----
-
 ## Project Overview
 
 This project develops a **multi-modal pipeline** for detecting **scene changes** and **visual cues** in videos containing radicalization or recruitment content. The system integrates **YOLOv8** object detection with **audio diarization** to identify visual and linguistic indicators of persuasion and narrative shifts.
@@ -30,7 +28,7 @@ python main.py --video_path path/to/video.mp4 \
                --detect_objects \
                --output_path ./results/detections.json
 Features
-
+---
 Frame extraction from videos
 
 Configurable frame interval
@@ -47,6 +45,7 @@ Emotion recognition
 
 Model & Methodology
 Visual Pipeline
+---
 
 Utilized YOLOv8 for high-accuracy object detection.
 
@@ -55,7 +54,7 @@ Outputs include bounding boxes [x1, y1, x2, y2], confidence, and class label.
 Detections saved as JSON structures for downstream processing.
 
 Scene Change Detection (KAFR)
-
+---
 Tracked objects across frames and computed centroid velocities.
 
 Frames exceeding a velocity threshold (65) are flagged as scene changes.
@@ -63,13 +62,13 @@ Frames exceeding a velocity threshold (65) are flagged as scene changes.
 Results exported as CSV for later analysis.
 
 Audio Pipeline
-
+---
 Integrated speech segmentation and speaker diarization.
 
 Aligned audio timestamps with visual detections.
 
 Datasets & Benchmarking
-
+---
 Benchmarked on BBC Planet Earth and TSUNAMI datasets (scene-change ground truth).
 
 Achieved ~72–75% accuracy on benchmark datasets.

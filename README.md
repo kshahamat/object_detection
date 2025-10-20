@@ -1,9 +1,5 @@
 # Radicalization Vision Pipeline
 
-**Author:** Kimiya Shahamat  
-**Course:** Professor Julia Hirschberg — Radicalization Research Final Report  
-**Date:** May 11, 2025  
-
 ---
 
 ## Project Overview
